@@ -7,7 +7,27 @@ packages = ["redpajama"]
 
 package_data = {"": ["*"]}
 
-install_requires = []
+install_requires = [
+    "datasets",
+    "s3fs",
+    "dill",
+    "tqdm",
+    "nltk",
+    "fasttext",
+    "polars",
+    "pyarrow",
+    "numpy",
+    "msgspec",
+    "boto3",
+    "networkit",
+    "scrubadub",
+    "textstat",
+    "xopen",
+    "rich",
+    "progiter",
+    "pybloomfiltermmap3",
+    "transformers",
+]
 
 dependency_links = []
 

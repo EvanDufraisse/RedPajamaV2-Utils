@@ -1,3 +1,26 @@
+# IMPORTANT: This is a fork of the original RedPajama-Data repository. The original repository is available at
+https://github.com/togethercomputer/RedPajama-Data/tree/main
+
+This package can be installed using:
+
+```bash
+pip install ./
+
+# or
+
+pip install git+https://github.com/EvanDufraisse/RedPajamaV2-Utils.git
+```
+
+Package is available under the name 'redpajama', and every function of the repo can be imported in this fashion:
+
+```python
+
+from redpajama.core.quality_signals.natural_language import register_natural_language_callables 
+
+callables = register_natural_language_callables()
+```
+
+
 # RedPajama-Data-v2: an Open Dataset with 30 Trillion Tokens for Training Large Language Models
 
 <img width="500" src="docs/rpv2.png" />
