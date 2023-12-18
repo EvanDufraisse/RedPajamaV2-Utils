@@ -1,4 +1,6 @@
-# IMPORTANT: This is a fork of the original RedPajama-Data repository. The original repository is available at
+# IMPORTANT: This is a fork of the original RedPajama-Data repository. 
+
+The original repository is available at:
 https://github.com/togethercomputer/RedPajama-Data/tree/main
 
 This package can be installed using:
