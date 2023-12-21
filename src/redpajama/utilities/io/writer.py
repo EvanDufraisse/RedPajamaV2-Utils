@@ -11,10 +11,10 @@ from typing import Type, Any, Dict, List, Tuple, Optional
 
 class Writer:
     def __init__(
-            self,
-            uri: str,
-            schema: List[Tuple[str, type]],
-            s3_client: Optional[boto3.client] = None
+        self,
+        uri: str,
+        schema: List[Tuple[str, type]],
+        s3_client: Optional[boto3.client] = None,
     ):
         self._client = s3_client
         uri = urlparse(uri)
@@ -35,8 +35,10 @@ class Writer:
             else:
                 raise ValueError(f"File type of {fp} not supported.")
         else:
-            raise ValueError(f"Invalid uri: {uri}; must be of the form "
-                             f"s3://<bucket>/<key> or file://<path>")
+            raise ValueError(
+                f"Invalid uri: {uri}; must be of the form "
+                f"s3://<bucket>/<key> or file://<path>"
+            )
 
         # encode records using msgspec
         self._encoder = msgspec.json.Encoder()
@@ -65,11 +67,11 @@ class Writer:
 
 
 class ParquetBatchWriter:
-
     def __init__(self, output_fp, schema: pa.Schema):
         self._schema = schema
         self._writer = pq.ParquetWriter(output_fp, self._schema)
         self.__init_batch()
+        self.counter = 0
 
     def close(self):
         if len(self._batch[self._schema.names[0]]) > 0:
@@ -79,16 +81,23 @@ class ParquetBatchWriter:
     def update_batch(self, obj: Dict[str, Any]):
         for col in self._schema.names:
             self._batch[col].append(obj[col])
+        self.counter += 1
 
     def write_batch(self):
-        self._writer.write_batch(batch=pa.record_batch(
-            data=[
-                pa.array(self._batch[field.name], type=field.type)
-                for field in self._schema
-            ],
-            schema=self._schema
-        ))
+        self._writer.write_batch(
+            batch=pa.record_batch(
+                data=[
+                    pa.array(self._batch[field.name], type=field.type)
+                    for field in self._schema
+                ],
+                schema=self._schema,
+            )
+        )
         self.__init_batch()
+        self.counter = 0
+
+    def __len__(self):
+        return self.counter
 
     def __init_batch(self):
         self._batch = {col: [] for col in self._schema.names}
